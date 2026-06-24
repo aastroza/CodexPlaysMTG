@@ -2,7 +2,12 @@
 
 This is the first local audio loop for Codex stream commentary.
 
-Codex writes a short comment as JSON. A local daemon turns it into speech with macOS `say`, plays it with `afplay`, and records whether it was spoken, skipped, or failed.
+Codex writes a short comment as JSON. A local daemon turns it into speech, plays it with `afplay`, and records whether it was spoken, skipped, or failed.
+
+The daemon supports two text-to-speech backends:
+
+- `say`: local macOS speech, no API needed
+- `openai`: OpenAI speech generation with `gpt-4o-mini-tts`
 
 ## Requirements
 
@@ -13,11 +18,15 @@ Codex writes a short comment as JSON. A local daemon turns it into speech with m
 
 No npm dependencies are required.
 
+OpenAI speech also needs `OPENAI_API_KEY` in `.env.local` or the shell environment.
+
 ## Start the daemon
 
 ```bash
 npm run commentary
 ```
+
+By default, this uses macOS `say`.
 
 The daemon watches:
 
@@ -120,3 +129,45 @@ npm run comment -- --ttl 10000 --kind test "Audio test. Codex commentary is onli
 You should hear the line through the Mac's system audio.
 
 OBS can capture that later. For now, the goal is only to prove the local text-to-audio loop.
+
+## OpenAI voice
+
+Use OpenAI speech when the local macOS voice is too stiff.
+
+Create `.env.local`:
+
+```bash
+OPENAI_API_KEY=...
+```
+
+Then run:
+
+```bash
+CODEX_COMMENTARY_TTS=openai npm run commentary
+```
+
+Send a comment:
+
+```bash
+npm run comment -- --ttl 20000 --kind test "Bow is the payoff. Without Bow, the loop is cute. With Bow, it becomes math."
+```
+
+Defaults:
+
+```text
+CODEX_COMMENTARY_OPENAI_MODEL=gpt-4o-mini-tts
+CODEX_COMMENTARY_OPENAI_VOICE=marin
+CODEX_COMMENTARY_OPENAI_FORMAT=wav
+```
+
+The daemon sends a short voice direction with each request:
+
+```text
+Sound like a relaxed, dry, friendly MTG streamer. Keep the delivery natural, not announcer-like. Do not overperform.
+```
+
+Override it when needed:
+
+```bash
+CODEX_COMMENTARY_OPENAI_INSTRUCTIONS="Sound calm, amused, and concise." CODEX_COMMENTARY_TTS=openai npm run commentary
+```

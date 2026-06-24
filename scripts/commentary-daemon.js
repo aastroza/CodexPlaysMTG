@@ -6,6 +6,9 @@ const path = require("path");
 const { spawn } = require("child_process");
 
 const repoRoot = path.resolve(__dirname, "..");
+
+loadLocalEnv(path.join(repoRoot, ".env.local"));
+
 const root = path.resolve(
   process.env.CODEX_COMMENTARY_ROOT ||
     path.join(repoRoot, "runtime", "commentary")
@@ -24,8 +27,15 @@ const dirs = {
 const pollMs = numberFromEnv("CODEX_COMMENTARY_POLL_MS", 250);
 const defaultTtlMs = numberFromEnv("CODEX_COMMENTARY_TTL_MS", 8000);
 const exitAfterIdleMs = numberFromEnv("CODEX_COMMENTARY_EXIT_AFTER_IDLE_MS", 0);
+const ttsBackend = String(process.env.CODEX_COMMENTARY_TTS || "say");
 const rate = String(process.env.CODEX_COMMENTARY_RATE || "185");
 const voice = process.env.CODEX_COMMENTARY_VOICE || "";
+const openaiModel = process.env.CODEX_COMMENTARY_OPENAI_MODEL || "gpt-4o-mini-tts";
+const openaiVoice = process.env.CODEX_COMMENTARY_OPENAI_VOICE || "marin";
+const openaiFormat = process.env.CODEX_COMMENTARY_OPENAI_FORMAT || "wav";
+const openaiInstructions =
+  process.env.CODEX_COMMENTARY_OPENAI_INSTRUCTIONS ||
+  "Sound like a relaxed, dry, friendly MTG streamer. Keep the delivery natural, not announcer-like. Do not overperform.";
 const muteFile = path.join(root, "commentary.mute");
 
 let stopping = false;
@@ -47,6 +57,7 @@ async function main() {
   await ensureDirs();
 
   console.log(`[commentary] watching ${dirs.inbox}`);
+  console.log(`[commentary] tts backend: ${ttsBackend}`);
   console.log("[commentary] write comments with: npm run comment -- \"text\"");
   console.log(`[commentary] mute with: touch ${muteFile}`);
 
@@ -113,7 +124,10 @@ async function processFile(filePath) {
     return;
   }
 
-  const audioPath = path.join(dirs.audioReady, `${safeName(normalized.id)}.aiff`);
+  const audioPath = path.join(
+    dirs.audioReady,
+    `${safeName(normalized.id)}.${audioExtension()}`
+  );
 
   try {
     await synthesize(normalized.text, audioPath);
@@ -221,6 +235,15 @@ function isMuted() {
 }
 
 async function synthesize(text, outputPath) {
+  if (ttsBackend === "openai") {
+    await synthesizeOpenAI(text, outputPath);
+    return;
+  }
+
+  if (ttsBackend !== "say") {
+    throw new Error(`unknown tts backend: ${ttsBackend}`);
+  }
+
   const args = [];
 
   if (voice) {
@@ -229,6 +252,41 @@ async function synthesize(text, outputPath) {
 
   args.push("-r", rate, "-o", outputPath, text);
   await run("say", args);
+}
+
+async function synthesizeOpenAI(text, outputPath) {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is missing. Add it to .env.local or the environment.");
+  }
+
+  if (typeof fetch !== "function") {
+    throw new Error("this Node.js runtime does not provide fetch");
+  }
+
+  const response = await fetch("https://api.openai.com/v1/audio/speech", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: openaiModel,
+      voice: openaiVoice,
+      input: text,
+      instructions: openaiInstructions,
+      response_format: openaiFormat
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`OpenAI speech request failed: ${response.status} ${errorText}`);
+  }
+
+  const audio = Buffer.from(await response.arrayBuffer());
+  await fs.writeFile(outputPath, audio);
 }
 
 async function play(audioPath) {
@@ -308,6 +366,50 @@ function safeName(value) {
   return String(value)
     .replace(/[^a-zA-Z0-9._-]/g, "-")
     .slice(0, 96);
+}
+
+function audioExtension() {
+  if (ttsBackend === "openai") {
+    return openaiFormat === "mp3" ? "mp3" : openaiFormat;
+  }
+
+  return "aiff";
+}
+
+function loadLocalEnv(filePath) {
+  if (!fsSync.existsSync(filePath)) {
+    return;
+  }
+
+  const raw = fsSync.readFileSync(filePath, "utf8");
+
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+
+    if (!match) {
+      continue;
+    }
+
+    const key = match[1];
+    let value = match[2].trim();
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    if (!(key in process.env)) {
+      process.env[key] = value;
+    }
+  }
 }
 
 function numberFromEnv(name, fallback) {
