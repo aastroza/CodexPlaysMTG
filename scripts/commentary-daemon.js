@@ -31,10 +31,10 @@ const ttsBackend = String(process.env.CODEX_COMMENTARY_TTS || "say");
 const rate = String(process.env.CODEX_COMMENTARY_RATE || "185");
 const voice = process.env.CODEX_COMMENTARY_VOICE || "";
 const openaiModel = process.env.CODEX_COMMENTARY_OPENAI_MODEL || "gpt-4o-mini-tts";
-const openaiVoice = process.env.CODEX_COMMENTARY_OPENAI_VOICE || "marin";
+const openaiVoice = process.env.CODEX_COMMENTARY_OPENAI_VOICE || "verse";
 const openaiFormat = process.env.CODEX_COMMENTARY_OPENAI_FORMAT || "wav";
 const openaiSpeed = clampNumber(
-  numberFromEnv("CODEX_COMMENTARY_OPENAI_SPEED", 1.12),
+  numberFromEnv("CODEX_COMMENTARY_OPENAI_SPEED", 1.15),
   0.25,
   4
 );

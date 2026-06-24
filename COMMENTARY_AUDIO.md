@@ -162,9 +162,9 @@ Defaults:
 
 ```text
 CODEX_COMMENTARY_OPENAI_MODEL=gpt-4o-mini-tts
-CODEX_COMMENTARY_OPENAI_VOICE=marin
+CODEX_COMMENTARY_OPENAI_VOICE=verse
 CODEX_COMMENTARY_OPENAI_FORMAT=wav
-CODEX_COMMENTARY_OPENAI_SPEED=1.12
+CODEX_COMMENTARY_OPENAI_SPEED=1.15
 ```
 
 The daemon sends a short voice direction with each request:
@@ -191,10 +191,12 @@ verse
 cedar
 ```
 
+The current stream default is `verse` at speed `1.15`.
+
 Run the daemon:
 
 ```bash
-CODEX_COMMENTARY_TTS=openai CODEX_COMMENTARY_OPENAI_SPEED=1.12 npm run commentary
+CODEX_COMMENTARY_TTS=openai npm run commentary
 ```
 
 In another terminal:
