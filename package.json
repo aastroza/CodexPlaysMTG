@@ -1,0 +1,10 @@
+{
+  "name": "codex-plays-mtg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "commentary": "node scripts/commentary-daemon.js",
+    "comment": "node scripts/commentary-send.js"
+  }
+}

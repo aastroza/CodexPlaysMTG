@@ -102,6 +102,8 @@ Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253
 
 `COMMENTS.md` records a separate idea: Codex speaking like a streamer during the match, even when chat has not asked anything. The first version is text-only. Audio can come later.
 
+`COMMENTARY_AUDIO.md` documents the first local audio loop: write a comment event, turn it into speech with macOS `say`, and play it through system audio with `afplay`.
+
 ## How the project should grow
 
 - What does Codex need to know before playing this deck?

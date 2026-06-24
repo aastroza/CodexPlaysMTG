@@ -195,7 +195,9 @@ These labels make it easier to turn a stream moment into a better skill, a bette
 
 ## Future audio feature
 
-Audio should come after the text behavior is good.
+The first audio MVP is documented in `COMMENTARY_AUDIO.md`.
+
+Audio should still come after the text behavior is good.
 
 A simple path:
 
