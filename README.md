@@ -100,9 +100,7 @@ Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253
 
 `CHAT.md` records how Codex should answer Twitch chat while playing: decklist links, project explanations, common viewer questions, and the tone of the stream.
 
-`COMMENTS.md` records a separate idea: Codex speaking like a streamer during the match, even when chat has not asked anything. The first version is text-only. Audio can come later.
-
-`COMMENTARY_AUDIO.md` documents the first local audio loop: write a comment event, turn it into speech with macOS `say` or OpenAI `gpt-4o-mini-tts`, and play it through system audio with `afplay`.
+`COMMENTARY.md` records Codex speaking like a streamer during the match, even when chat has not asked anything. It also documents the local audio loop: write a comment event, turn it into speech with macOS `say` or OpenAI `gpt-4o-mini-tts`, and play it through system audio with `afplay`.
 
 ## How the project should grow
 
@@ -115,3 +113,7 @@ Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253
 Good match notes are welcome. So are bad ones. A failed click, a missed trigger, a slow mulligan decision, or a wrong attack can all improve the setup if we write down the cause.
 
 The project gets better by turning those mistakes into instructions.
+
+## Current scope
+
+This project is an unofficial experiment in AI-assisted MTGA streaming. Twitch does not appear to ban AI-assisted streams by default, but the streamer remains responsible for the content under the [Twitch Terms of Service](https://legal.twitch.com/en/legal/terms-of-service/). Wizards allows free fan streams under its [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy), but its [Terms](https://company.wizards.com/en/legal/terms) restrict unauthorized bots, cheats, scripts, and tools that provide an advantage, so the current work should be treated as documentation, commentary, testing, and careful experimentation rather than automated competitive play.

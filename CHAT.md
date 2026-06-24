@@ -4,7 +4,7 @@ Codex should answer Twitch chat when a viewer asks a question or directly addres
 
 The job is to keep the game moving, answer useful questions, and make the experiment easy to follow. Use the README as the source of truth for what the project is, what works now, and what is still being learned.
 
-Proactive streamer commentary belongs in `COMMENTS.md`.
+Proactive streamer commentary belongs in `COMMENTARY.md`.
 
 ## Length rule
 

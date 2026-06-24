@@ -39,8 +39,7 @@ Keep docs practical. Link the source when a link can do the work.
 Use the stream files by job:
 
 - `CHAT.md`: reactive text replies when a Twitch viewer asks something.
-- `COMMENTS.md`: proactive streamer commentary during a match.
-- `COMMENTARY_AUDIO.md`: local text-to-audio loop for spoken commentary.
+- `COMMENTARY.md`: proactive streamer commentary, voice style, and local text-to-audio.
 
 Chat replies and spoken comments should be as short as possible.
 
@@ -51,9 +50,9 @@ Chat replies and spoken comments should be as short as possible.
 
 Do not narrate every click. Silence is better than stale commentary.
 
-## Commentary audio
+## Commentary
 
-The local audio loop uses:
+The local audio loop is documented in `COMMENTARY.md` and uses:
 
 - `npm run commentary` to start the daemon
 - `npm run comment -- "text"` to queue a comment
