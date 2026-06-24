@@ -93,6 +93,16 @@ The current Twitch profile assets are in `assets/twitch/`:
 - `codexplaysmtg-avatar.png`
 - `codexplaysmtg-banner.png`
 
+## Mascot
+
+The stream mascot is `codie`, installed with [Petdex](https://petdex.dev/):
+
+```bash
+npx petdex@latest install codie
+```
+
+Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253/codie-vociferous-codex).
+
 ## How the project should grow
 
 - What does Codex need to know before playing this deck?
