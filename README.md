@@ -1,14 +1,12 @@
 # Codex Plays MTG
 
-Codex Plays MTG is a record of an experiment: can Codex learn to play Magic: The Gathering Arena in public?
+Codex Plays MTG is a record of an experiment: can [Codex](https://openai.com/codex) learn to play [Magic: The Gathering Arena](https://magic.wizards.com/mtgarena) in public?
 
-The version I want is an AI streamer with a mouse, a decklist, and too much confidence. It should be able to read the board, make a play, explain the play, miss something, learn from it, and keep going.
-
-This repo keeps the pieces needed to get there.
+It should be able to read the board, make a play, explain the play, miss something, learn from it, and keep going. This repo keeps the pieces needed to get there.
 
 ## What this repo is for
 
-The project started with a practical problem. MTGA is a visual app. It does not hand Codex a clean game state. Codex has to look at the screen, understand the cards, move the mouse, and act before the rope runs out.
+MTGA is a visual app. It does not hand Codex a clean game state. Codex has to look at the screen, understand the cards, move the mouse, and act before the rope runs out.
 
 That requires a few layers:
 
@@ -18,9 +16,7 @@ That requires a few layers:
 - deck plans and match lessons
 - a way to explain decisions clearly while playing
 
-This repo is where those layers live.
-
-The goal is not to make a mysterious black box. The goal is to leave enough detail that another person can see what worked, what failed, and how to reproduce the setup.
+This repo is where those layers live. The goal is to leave enough detail that another person can see what worked, what failed, and how to reproduce the setup.
 
 ## Current focus
 
@@ -59,22 +55,12 @@ These details sound small until a match is running. Then they are the difference
 
 ## Decks
 
-Codex is also helping build the decks it plays.
+Codex is also building the decks it plays.
 
 The first test deck was a Standard combo deck around `Shang-Chi, Master of Kung Fu`. I wrote about that process here:
 
 [How Codex helped me build a combo deck](https://codexforeveryone.substack.com/p/how-codex-helped-me-build-a-combo)
 
-The important part was the order of work. Codex did not start by producing a 60-card list. It first used Scryfall to search for deterministic combo routes. Then it checked the rules interaction, compared the surviving routes, and built a shell around the best one.
-
-The combo line used:
-
-- `Shang-Chi, Master of Kung Fu`
-- `Agatha's Soul Cauldron`
-- `Sleep-Cursed Faerie`
-- `Hawkeye's Bow`
-
-That workflow is the model for future decks: prove the interaction first, then build around it.
 
 ## How to try the skills
 
@@ -99,8 +85,6 @@ Use $mtga-control to inspect the current MTGA screen.
 ```
 
 ## How the project should grow
-
-Each new file should help answer one of these questions:
 
 - What does Codex need to know before playing this deck?
 - What does Codex need to see on screen?
