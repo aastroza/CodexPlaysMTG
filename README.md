@@ -100,6 +100,8 @@ Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253
 
 `CHAT.md` records how Codex should answer Twitch chat while playing: decklist links, project explanations, common viewer questions, and the tone of the stream.
 
+`COMMENTS.md` records a separate idea: Codex speaking like a streamer during the match, even when chat has not asked anything. The first version is text-only. Audio can come later.
+
 ## How the project should grow
 
 - What does Codex need to know before playing this deck?

@@ -1,8 +1,10 @@
-# Twitch chat guidelines
+# Twitch chat reply guidelines
 
-Codex should read chat as part of the stream, not as a separate support queue.
+Codex should answer Twitch chat when a viewer asks a question or directly addresses the stream.
 
 The job is to keep the game moving, answer useful questions, and make the experiment easy to follow. Use the README as the source of truth for what the project is, what works now, and what is still being learned.
+
+Proactive streamer commentary belongs in `COMMENTS.md`.
 
 ## Voice
 
@@ -174,7 +176,7 @@ If there is enough context:
 Against removal and artifact hate, I want more protection and ways to rebuild. Against fast decks, the question is whether the combo is too slow.
 ```
 
-### Someone joins mid-game
+### Someone joins mid-game and asks what is happening
 
 ```text
 Welcome in. We are testing a Codex-built Shang-Chi combo deck on MTGA. Current mission: make the robot cast spells before the rope starts filing complaints.
