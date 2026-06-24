@@ -1,101 +1,84 @@
 # Codex Plays MTG
 
-Codex is not a pro player. Codex is not a bot laddering in silence. Codex is an AI streamer with a mouse, a decklist, and far too much confidence.
+Codex Plays MTG is a record of an experiment: can Codex learn to play Magic: The Gathering Arena in public?
 
-This repo documents the ongoing experiment of teaching Codex how to play Magic: The Gathering Arena, explain its decisions, and eventually stream the whole thing on Twitch.
+The version I want is an AI streamer with a mouse, a decklist, and too much confidence. It should be able to read the board, make a play, explain the play, miss something, learn from it, and keep going.
 
-The goal is simple: make the process visible enough that other people can understand it, improve it, and copy it if they want.
+This repo keeps the pieces needed to get there.
 
-## What This Project Is
+## What this repo is for
 
-Codex Plays MTG is a working notebook for an AI-assisted MTGA setup.
+The project started with a practical problem. MTGA is a visual app. It does not hand Codex a clean game state. Codex has to look at the screen, understand the cards, move the mouse, and act before the rope runs out.
 
-It tracks the practical pieces needed for Codex to:
+That requires a few layers:
 
-- understand Magic cards using reliable card data
-- inspect the MTGA screen
-- move the mouse and interact with the game
-- play decks with a clear plan
-- explain decisions in plain English
-- learn from misplays, UI failures, and testing
-- eventually act like a watchable AI streamer, not a silent automation script
+- card knowledge from a reliable source
+- instructions for controlling MTGA
+- notes about the game's UI
+- deck plans and match lessons
+- a way to explain decisions clearly while playing
 
-This is not trying to hide the human in the loop. The interesting part is the collaboration: Codex can read, reason, click, and narrate, but the setup still needs careful prompts, tools, feedback, and a lot of iteration.
+This repo is where those layers live.
 
-## Current Status
+The goal is not to make a mysterious black box. The goal is to leave enough detail that another person can see what worked, what failed, and how to reproduce the setup.
 
-Right now the project is focused on two things:
+## Current focus
 
-1. Giving Codex the tools it needs to understand Magic cards.
-2. Giving Codex a repeatable way to control MTGA on macOS.
+The first useful work is stored as Codex skills under `skills/`.
 
-The first skills are stored in this repo under `skills/`:
+A skill is a small instruction folder that teaches Codex how to do one job. These two are the base of the project:
 
 - `skills/scryfall-api`
 - `skills/mtga-control`
 
-These are Codex skills, which are small reusable instruction folders. They teach Codex how to do a specific kind of work.
+Together they give Codex two things it needs before it can play a real game: card text and a mouse.
 
-## The Skills
+## `scryfall-api`
 
-### Scryfall API
+Magic depends on exact words. A combo can work or fail because of one line of Oracle text.
 
-The `scryfall-api` skill teaches Codex how to use the Scryfall API as the source of truth for Magic cards.
+The `scryfall-api` skill tells Codex how to use Scryfall instead of guessing from memory. It can check exact card text and search for cards that fit a deckbuilding question.
 
-Scryfall is used for:
+That matters for deckbuilding and for gameplay. If Codex is going to explain why a line works, it should start from the actual card text.
 
-- exact card names
-- Oracle text
-- card types
-- legalities
-- rulings
-- set data
-- search queries
-- card images and metadata
+## `mtga-control`
 
-This matters because Magic is a game where one word can decide whether a combo works.
+The `mtga-control` skill records what we have learned about operating Arena on macOS.
 
-### MTGA Control
+The main lesson so far: MTGA is not a normal accessible app. Codex can see screenshots, but most game objects do not appear as buttons or fields. Playing the game means working from coordinates.
 
-The `mtga-control` skill teaches Codex how to interact with Magic: The Gathering Arena.
+The skill includes notes such as:
 
-It documents things we learned the hard way, including:
+- use screenshots as the source of truth
+- click buttons by coordinate when needed
+- drag cards from hand to the battlefield to play them
+- use a CoreGraphics helper when normal clicks do not activate MTGA
+- keep live-game narration short so the rope does not punish us
 
-- MTGA does not expose most useful game UI through accessibility APIs.
-- Screenshots are the main source of truth.
-- Buttons can often be clicked by coordinate.
-- Cards in hand should be dragged onto the battlefield, not just clicked.
-- Some clicks need a lower-level CoreGraphics helper on macOS.
-- During a live game, Codex has to act quickly enough to avoid the rope.
+These details sound small until a match is running. Then they are the difference between casting the spell and staring at a highlighted card while the turn timer burns down.
 
-This skill is still early. Every match teaches us something new about the UI.
+## Decks
 
-## Deckbuilding
+Codex is also helping build the decks it plays.
 
-Codex is also building the decks it plays.
-
-The first major deckbuilding experiment was a Standard combo deck around `Shang-Chi, Master of Kung Fu`.
-
-You can read the writeup here:
+The first test deck was a Standard combo deck around `Shang-Chi, Master of Kung Fu`. I wrote about that process here:
 
 [How Codex helped me build a combo deck](https://codexforeveryone.substack.com/p/how-codex-helped-me-build-a-combo)
 
-That process started with one new card and asked Codex to search for real deterministic combo lines before building a decklist. The result was a combo involving:
+The important part was the order of work. Codex did not start by producing a 60-card list. It first used Scryfall to search for deterministic combo routes. Then it checked the rules interaction, compared the surviving routes, and built a shell around the best one.
+
+The combo line used:
 
 - `Shang-Chi, Master of Kung Fu`
 - `Agatha's Soul Cauldron`
 - `Sleep-Cursed Faerie`
 - `Hawkeye's Bow`
 
-The important idea was not just the decklist. It was the workflow: verify the card text, prove the combo works, compare possible routes, then build the shell.
+That workflow is the model for future decks: prove the interaction first, then build around it.
 
-That is the kind of process this repo is meant to preserve.
+## How to try the skills
 
-## How To Use This Repo
-
-For now, the repo is mainly documentation plus reusable Codex skills.
-
-To try the skills locally, copy them into your Codex skills directory:
+Copy the skills into your local Codex skills directory:
 
 ```bash
 mkdir -p ~/.codex/skills
@@ -103,9 +86,9 @@ cp -R skills/scryfall-api ~/.codex/skills/
 cp -R skills/mtga-control ~/.codex/skills/
 ```
 
-Then restart Codex so it can detect the new skills.
+Restart Codex after copying them.
 
-After that, you can ask Codex to use them. For example:
+Then you can ask for things like:
 
 ```text
 Use $scryfall-api to look up the Oracle text for Agatha's Soul Cauldron.
@@ -115,50 +98,16 @@ Use $scryfall-api to look up the Oracle text for Agatha's Soul Cauldron.
 Use $mtga-control to inspect the current MTGA screen.
 ```
 
-## Where This Is Going
+## How the project should grow
 
-The next pieces will probably include:
+Each new file should help answer one of these questions:
 
-- better MTGA screen-reading notes
-- match logs
-- mulligan heuristics
-- sideboarding guides
-- deck-specific play patterns
-- stream narration rules
-- Twitch setup notes
-- overlays or captions
-- a way to summarize games after they end
-- tools for tracking what Codex got right and wrong
+- What does Codex need to know before playing this deck?
+- What does Codex need to see on screen?
+- What actions can Codex take reliably in MTGA?
+- What went wrong in a real match?
+- What instruction would prevent that mistake next time?
 
-The dream version is an AI streamer that can play a real deck, explain its plan, make jokes, punt sometimes, learn from the punt, and show its work.
+Good match notes are welcome. So are bad ones. A failed click, a missed trigger, a slow mulligan decision, or a wrong attack can all improve the setup if we write down the cause.
 
-## Project Philosophy
-
-This project is not about pretending Codex is perfect.
-
-It is about making the loop visible:
-
-1. Give Codex better tools.
-2. Let it try.
-3. Watch where it fails.
-4. Write down what happened.
-5. Improve the skills, prompts, and deck plans.
-6. Try again.
-
-If Codex wins, great.
-
-If Codex loses because it clicked the wrong card, that is also data.
-
-## Repository Layout
-
-```text
-.
-├── AGENTS.md
-├── README.md
-└── skills
-    ├── mtga-control
-    └── scryfall-api
-```
-
-This layout will grow as the project becomes more complete.
-
+The project gets better by turning those mistakes into instructions.
