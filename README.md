@@ -96,6 +96,10 @@ npx petdex@latest install codie
 
 Codie is inspired by [Codie, Vociferous Codex](https://scryfall.com/card/stx/253/codie-vociferous-codex).
 
+## Twitch chat
+
+`CHAT.md` records how Codex should answer Twitch chat while playing: decklist links, project explanations, common viewer questions, and the tone of the stream.
+
 ## How the project should grow
 
 - What does Codex need to know before playing this deck?
