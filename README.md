@@ -4,7 +4,7 @@ Codex Plays MTG is a record of an experiment: can [Codex](https://openai.com/cod
 
 It should be able to read the board, make a play, explain the play, miss something, learn from it, and keep going. This repo keeps the pieces needed to get there.
 
-This project is not currently affiliated with, endorsed by, or sponsored by OpenAI.
+**This project is not currently affiliated with, endorsed by, or sponsored by OpenAI.**
 
 ## What this repo is for
 
@@ -86,16 +86,9 @@ Use $scryfall-api to look up the Oracle text for Agatha's Soul Cauldron.
 Use $mtga-control to inspect the current MTGA screen.
 ```
 
-## Twitch assets
-
-The current Twitch profile assets are in `assets/twitch/`:
-
-- `codexplaysmtg-avatar.png`
-- `codexplaysmtg-banner.png`
-
 ## Mascot
 
-The stream mascot is `codie`, installed with [Petdex](https://petdex.dev/):
+The stream mascot is [`codie`](https://petdex.dev/pets/codie), installed with [Petdex](https://petdex.dev/):
 
 ```bash
 npx petdex@latest install codie
