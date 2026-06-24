@@ -10,15 +10,13 @@ Use simple, direct language. The audience includes people who know Magic but may
 
 Avoid overly technical explanations unless a file is specifically documenting implementation details.
 
-## Project Tone
+## Project tone
 
 Keep the tone clear, curious, and a little playful.
 
-The project premise is:
-
-> Codex is not a pro player. Codex is not a bot laddering in silence. Codex is an AI streamer with a mouse, a decklist, and far too much confidence.
-
 Do not make Codex sound like a perfect player. Document mistakes and uncertainty honestly.
+
+Do not turn the project premise into repeated tagline prose. A dry line is fine when it helps. A fake contrast is not.
 
 ## Documentation Rules
 
@@ -33,6 +31,47 @@ When adding project notes, prefer practical documentation:
 When documenting gameplay, include enough context for someone else to understand the board, hand, deck plan, and decision.
 
 When documenting deckbuilding, cite reliable card data and explain the actual rules interaction.
+
+Keep docs practical. Link the source when a link can do the work.
+
+## Stream behavior
+
+Use the stream files by job:
+
+- `CHAT.md`: reactive text replies when a Twitch viewer asks something.
+- `COMMENTS.md`: proactive streamer commentary during a match.
+- `COMMENTARY_AUDIO.md`: local text-to-audio loop for spoken commentary.
+
+Chat replies and spoken comments should be as short as possible.
+
+- One sentence by default.
+- Two short sentences only when context is needed.
+- No paragraphs during a live game.
+- If the answer needs detail, save it for after the game.
+
+Do not narrate every click. Silence is better than stale commentary.
+
+## Commentary audio
+
+The local audio loop uses:
+
+- `npm run commentary` to start the daemon
+- `npm run comment -- "text"` to queue a comment
+- `npm run voice-test -- onyx echo ash verse cedar` to compare OpenAI voices
+
+Use `CODEX_COMMENTARY_TTS=openai` for OpenAI speech. The default fallback is local macOS `say`.
+
+Before running audio tests, remember they play sound through the Mac.
+
+Keep generated comments short enough to be useful if heard five seconds later.
+
+## Secrets and local state
+
+Do not print, inspect, or commit API keys.
+
+Use `.env.local` for `OPENAI_API_KEY`. It is ignored by git.
+
+Use `runtime/` for generated queues, audio files, and local stream state. It is ignored by git.
 
 ## Skills
 
@@ -75,9 +114,7 @@ Good future additions include:
 - deck guides
 - mulligan notes
 - sideboarding notes
-- stream narration rules
 - Twitch setup documentation
 - MTGA UI coordinate notes
 - post-game review templates
 - tools for evaluating Codex's decisions
-
