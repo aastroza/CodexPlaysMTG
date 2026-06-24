@@ -39,6 +39,18 @@ async function main() {
     text: text.trim()
   };
 
+  if (options.voice) {
+    event.voice = options.voice;
+  }
+
+  if (options.speed) {
+    event.speed = Number(options.speed);
+  }
+
+  if (options.instructions) {
+    event.instructions = options.instructions;
+  }
+
   const fileName = `${stamp(now)}-${safeName(id)}.json`;
   const finalPath = path.join(inbox, fileName);
   const tempPath = `${finalPath}.tmp`;
@@ -56,6 +68,9 @@ function parseArgs(args) {
     kind: "commentary",
     priority: "normal",
     id: "",
+    voice: "",
+    speed: "",
+    instructions: "",
     stdin: false,
     text: []
   };
@@ -80,6 +95,21 @@ function parseArgs(args) {
 
     if (arg === "--id") {
       options.id = String(args[++i] || "");
+      continue;
+    }
+
+    if (arg === "--voice") {
+      options.voice = String(args[++i] || "");
+      continue;
+    }
+
+    if (arg === "--speed") {
+      options.speed = String(args[++i] || "");
+      continue;
+    }
+
+    if (arg === "--instructions") {
+      options.instructions = String(args[++i] || "");
       continue;
     }
 
@@ -117,6 +147,7 @@ function usage() {
   console.error("Usage:");
   console.error('  npm run comment -- "We have Cauldron, but no Shang-Chi yet."');
   console.error('  npm run comment -- --ttl 6000 --kind deck_note "This hand is risky."');
+  console.error('  npm run comment -- --voice onyx --speed 1.15 "Short voice test."');
 }
 
 function stamp(date) {

@@ -33,9 +33,14 @@ const voice = process.env.CODEX_COMMENTARY_VOICE || "";
 const openaiModel = process.env.CODEX_COMMENTARY_OPENAI_MODEL || "gpt-4o-mini-tts";
 const openaiVoice = process.env.CODEX_COMMENTARY_OPENAI_VOICE || "marin";
 const openaiFormat = process.env.CODEX_COMMENTARY_OPENAI_FORMAT || "wav";
+const openaiSpeed = clampNumber(
+  numberFromEnv("CODEX_COMMENTARY_OPENAI_SPEED", 1.12),
+  0.25,
+  4
+);
 const openaiInstructions =
   process.env.CODEX_COMMENTARY_OPENAI_INSTRUCTIONS ||
-  "Sound like a relaxed, dry, friendly MTG streamer. Keep the delivery natural, not announcer-like. Do not overperform.";
+  "Sound like a relaxed, dry, friendly MTG streamer. Speak with a little pace and personality. Keep the delivery natural, not announcer-like. Do not overperform.";
 const muteFile = path.join(root, "commentary.mute");
 
 let stopping = false;
@@ -130,7 +135,7 @@ async function processFile(filePath) {
   );
 
   try {
-    await synthesize(normalized.text, audioPath);
+    await synthesize(normalized, audioPath);
   } catch (error) {
     await writeEvent(filePath, dirs.failed, normalized, "failed", {
       reason: "tts_failed",
@@ -212,7 +217,10 @@ function normalizeEvent(event, filePath) {
     ttl_ms: Number.isFinite(ttlMs) ? ttlMs : defaultTtlMs,
     kind: String(event.kind || "commentary"),
     priority: String(event.priority || "normal"),
-    text: String(event.text || "").trim()
+    text: String(event.text || "").trim(),
+    voice: event.voice ? String(event.voice) : "",
+    speed: Number.isFinite(Number(event.speed)) ? Number(event.speed) : null,
+    instructions: event.instructions ? String(event.instructions) : ""
   };
 }
 
@@ -234,9 +242,9 @@ function isMuted() {
   return fsSync.existsSync(muteFile) || process.env.CODEX_COMMENTARY_MUTE === "1";
 }
 
-async function synthesize(text, outputPath) {
+async function synthesize(event, outputPath) {
   if (ttsBackend === "openai") {
-    await synthesizeOpenAI(text, outputPath);
+    await synthesizeOpenAI(event, outputPath);
     return;
   }
 
@@ -250,11 +258,11 @@ async function synthesize(text, outputPath) {
     args.push("-v", voice);
   }
 
-  args.push("-r", rate, "-o", outputPath, text);
+  args.push("-r", rate, "-o", outputPath, event.text);
   await run("say", args);
 }
 
-async function synthesizeOpenAI(text, outputPath) {
+async function synthesizeOpenAI(event, outputPath) {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
@@ -273,10 +281,11 @@ async function synthesizeOpenAI(text, outputPath) {
     },
     body: JSON.stringify({
       model: openaiModel,
-      voice: openaiVoice,
-      input: text,
-      instructions: openaiInstructions,
-      response_format: openaiFormat
+      voice: event.voice || openaiVoice,
+      input: event.text,
+      instructions: event.instructions || openaiInstructions,
+      response_format: openaiFormat,
+      speed: clampNumber(event.speed || openaiSpeed, 0.25, 4)
     })
   });
 
@@ -415,6 +424,10 @@ function loadLocalEnv(filePath) {
 function numberFromEnv(name, fallback) {
   const value = Number(process.env[name]);
   return Number.isFinite(value) && value >= 0 ? value : fallback;
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function sleep(ms) {

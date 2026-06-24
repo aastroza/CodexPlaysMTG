@@ -152,12 +152,19 @@ Send a comment:
 npm run comment -- --ttl 20000 --kind test "Bow is the payoff. Without Bow, the loop is cute. With Bow, it becomes math."
 ```
 
+Send one line with a specific voice and speed:
+
+```bash
+npm run comment -- --voice onyx --speed 1.15 "Bow is the payoff. With Bow, it becomes math."
+```
+
 Defaults:
 
 ```text
 CODEX_COMMENTARY_OPENAI_MODEL=gpt-4o-mini-tts
 CODEX_COMMENTARY_OPENAI_VOICE=marin
 CODEX_COMMENTARY_OPENAI_FORMAT=wav
+CODEX_COMMENTARY_OPENAI_SPEED=1.12
 ```
 
 The daemon sends a short voice direction with each request:
@@ -171,3 +178,41 @@ Override it when needed:
 ```bash
 CODEX_COMMENTARY_OPENAI_INSTRUCTIONS="Sound calm, amused, and concise." CODEX_COMMENTARY_TTS=openai npm run commentary
 ```
+
+## Voice tests
+
+OpenAI voices are not labeled by gender. For Codex, start by testing voices with a lower or more playful feel:
+
+```text
+onyx
+echo
+ash
+verse
+cedar
+```
+
+Run the daemon:
+
+```bash
+CODEX_COMMENTARY_TTS=openai CODEX_COMMENTARY_OPENAI_SPEED=1.12 npm run commentary
+```
+
+In another terminal:
+
+```bash
+npm run voice-test
+```
+
+Test a custom set:
+
+```bash
+npm run voice-test -- onyx echo verse
+```
+
+Try a faster read:
+
+```bash
+CODEX_COMMENTARY_OPENAI_SPEED=1.18 npm run voice-test -- onyx
+```
+
+For live commentary, keep spoken lines short. One sentence is the default. Two short sentences is the limit.

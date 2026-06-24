@@ -5,6 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "commentary": "node scripts/commentary-daemon.js",
-    "comment": "node scripts/commentary-send.js"
+    "comment": "node scripts/commentary-send.js",
+    "voice-test": "node scripts/commentary-voice-test.js"
   }
 }
