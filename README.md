@@ -1,6 +1,6 @@
 # Codex Plays MTG
 
-Codex Plays MTG is a record of an experiment: can [Codex](https://openai.com/codex) learn to play [Magic: The Gathering Arena](https://magic.wizards.com/mtgarena) in public?
+CodexPlaysMTG is a record of an experiment: can [Codex](https://openai.com/codex) learn to play [Magic: The Gathering Arena](https://magic.wizards.com/mtgarena) in public?
 
 It should be able to read the board, make a play, explain the play, miss something, learn from it, and keep going. This repo keeps the pieces needed to get there.
 
@@ -116,4 +116,5 @@ The project gets better by turning those mistakes into instructions.
 
 ## Current scope
 
-This project is an unofficial experiment in AI-assisted MTGA streaming. Twitch allows AI-assisted streams as long as the streamer remains responsible for the content under the [Twitch Terms of Service](https://legal.twitch.com/en/legal/terms-of-service/). Wizards allows free fan streams under its [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy), but its [Terms](https://company.wizards.com/en/legal/terms) restrict unauthorized bots, cheats, scripts, and tools that provide an advantage. The project starts with casual games where the humans involved know they are playing against a machine, plus documentation, commentary, testing, and careful experimentation before any competitive play.
+This project is an unofficial experiment in AI-assisted streaming. Twitch allows AI-assisted streams as long as the streamer remains responsible for the content under the [Twitch Terms of Service](https://legal.twitch.com/en/legal/terms-of-service/). Wizards of the Coast allows non-commercial fan streams under its [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy), but its [Terms](https://company.wizards.com/en/legal/terms) restrict unauthorized bots, cheats, scripts, and tools that provide an advantage. The project starts with casual games in which the human participants know they are playing against an AI system; it is not competitive play.
+
