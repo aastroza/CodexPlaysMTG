@@ -61,7 +61,7 @@ Codex is also building the decks it plays.
 
 The first test deck was a Standard combo deck around `Shang-Chi, Master of Kung Fu`. I wrote about that process here:
 
-[How Codex helped me build a combo deck](https://codexforeveryone.substack.com/p/how-codex-helped-me-build-a-combo)
+[How Codex helped me build a combo deck](https://codexforeveryone.substack.com/p/how-codex-helped-me-build-a-combo).
 
 
 ## How to try the skills
